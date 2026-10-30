@@ -1,0 +1,2 @@
+# Protege los archivos de configuración al utilizar Apache.
+Require all denied

@@ -1,0 +1,41 @@
+services:
+  web:
+    build: .
+    container_name: saniapp-web
+    ports:
+      - "8080:10000"
+    environment:
+      APP_ENV: development
+      APP_URL: http://localhost:8080
+      APP_TIMEZONE: America/Bogota
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_NAME: saniapp
+      DB_USER: saniapp_user
+      DB_PASSWORD: local_saniapp_password
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  database:
+    image: mysql:8.0
+    container_name: saniapp-database
+    environment:
+      MYSQL_DATABASE: saniapp
+      MYSQL_USER: saniapp_user
+      MYSQL_PASSWORD: local_saniapp_password
+      MYSQL_ROOT_PASSWORD: local_root_password
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - saniapp_mysql_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/01-saniapp.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-plocal_root_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  saniapp_mysql_data:

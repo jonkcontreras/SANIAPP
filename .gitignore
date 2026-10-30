@@ -1,0 +1,5 @@
+# No subir credenciales de cada entorno
+config/config.php
+*.log
+.DS_Store
+Thumbs.db
