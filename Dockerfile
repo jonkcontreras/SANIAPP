@@ -1,4 +1,4 @@
-# Imagen oficial de PHP con Apache para ejecutar SaniApp.
+
 FROM php:8.2-apache
 
 # Render espera que el servicio HTTP escuche en el puerto 10000.
